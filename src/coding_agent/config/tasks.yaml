@@ -1,0 +1,40 @@
+business_analyst_task:
+  description: >
+    The user wants this Python application: {topic}.
+    Write a build specification for a single module named app.py.
+    Include what the program does, each public function with its name, parameters,
+    return value, and behavior, a main() function that runs it from the command line,
+    and at least five acceptance cases, including edge cases and invalid input.
+    Do not write Python code.
+  expected_output: >
+    A specification for app.py with function signatures and at least five acceptance cases.
+  agent: business_analyst
+
+developer_task:
+  description: >
+    Implement the specification in one Python file.
+    Use the File Writer Tool to save it with filename "app.py", directory ".",
+    and overwrite true.
+    The file content must be valid Python only, with no markdown fences.
+    Put the behavior in importable functions so tests can use "from app import ...".
+    Include a main() function and an if __name__ == "__main__" block.
+    Handle the invalid-input cases from the specification.
+    After the file is saved, reply with the filename and the function names.
+  expected_output: >
+    Confirmation that app.py was written, and the list of functions it defines.
+  agent: developer
+
+tester_task:
+  description: >
+    Test the Python module saved as app.py in the output directory.
+    First use "Read a file's content" to read app.py.
+    Then write unittest tests that cover the acceptance cases. Import the functions
+    from app. Use the File Writer Tool to save them with filename "test_app.py",
+    directory ".", and overwrite true. The file content must be valid Python only,
+    with no markdown fences.
+    Then use "Run Python Tests" with test_filename "test_app.py".
+    Report each test name, whether it passed or failed, and the runner output for
+    any failure. Do not modify app.py.
+  expected_output: >
+    A test report that lists each test, whether it passed or failed, and the runner output.
+  agent: tester
